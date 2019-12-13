@@ -1,0 +1,25 @@
+language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - rust: nightly
+
+cache:
+    directories:
+        - $TRAVIS_BUILD_DIR/target
+        - $HOME/.cargo
+
+sudo: false
+
+# audit dependencies
+before_script:
+  - cargo install --force cargo-audit
+
+script:
+  - cargo audit
+  - cargo test --verbose
