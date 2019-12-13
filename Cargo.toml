@@ -1,6 +1,7 @@
 [package]
 name = "serde-with-expand-env"
 version = "0.1.0"
+description = "Parse environment variables in serde crate using deserialize_with."
 authors = ["roger <rogerduran@gmail.com>"]
 edition = "2018"
 
