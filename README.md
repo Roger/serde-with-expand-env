@@ -1,5 +1,5 @@
 # serde-with-expand-env
-[![Build Status](https://travis-ci.org/Roger/serde-with-expand-env.svg?branch=master)](https://travis-ci.org/Roger/serde-with-expand-env) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Build Status](https://travis-ci.org/Roger/serde-with-expand-env.svg?branch=master)](https://travis-ci.org/Roger/serde-with-expand-env) [![](http://meritbadge.herokuapp.com/serde-with-expand-env)](https://crates.io/crates/serde-with-expand-env) [![](https://docs.rs/serde-with-expand-env/badge.svg)](https://docs.rs/serde-with-expand-env) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 Parse environment variables in [`serde`](https://github.com/serde-rs/serde) crate using `deserialize_with`.
 
