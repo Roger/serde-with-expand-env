@@ -1,3 +1,4 @@
+use std::env;
 use serde::Deserialize;
 use serde_with_expand_env::with_expand_envs;
 
@@ -28,12 +29,12 @@ fn main() {
       string = "my string: $STRING2"
     "#;
 
-    envmnt::set("NAME", "Bruce");
-    envmnt::set("NUMBER1", "42");
-    envmnt::set("STRING1", "life, universe and everyhing");
+    env::set_var("NAME", "Bruce");
+    env::set_var("NUMBER1", "42");
+    env::set_var("STRING1", "life, universe and everyhing");
 
-    envmnt::set("NUMBER2", "1337");
-    envmnt::set("STRING2", "leet");
+    env::set_var("NUMBER2", "1337");
+    env::set_var("STRING2", "leet");
 
     let deserialized: Test = toml::from_str(&serialized).unwrap();
     println!("{:#?}", deserialized);

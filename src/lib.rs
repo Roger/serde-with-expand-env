@@ -1,5 +1,4 @@
-use envmnt::{ExpandOptions, ExpansionType};
-use serde::{self, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, de::Error};
 use std::fmt::Display;
 use std::str::FromStr;
 
@@ -8,6 +7,7 @@ use std::str::FromStr;
 /// # Example:
 ///
 /// ```rust
+/// use std::env;
 /// use serde_json;
 /// use serde::Deserialize;
 /// use serde_with_expand_env::with_expand_envs;
@@ -22,16 +22,19 @@ use std::str::FromStr;
 ///
 /// let serialized = r#"{"number": "$NUMBER", "string": "my string: $STRING"}"#;
 ///
-/// envmnt::set("NUMBER", "42");
-/// envmnt::set("STRING", "hacker");
+/// // No envs set will fail with enviroment variable not found
+/// assert_eq!(serde_json::from_str::<Test>(&serialized).is_err(), true);
+///
+/// env::set_var("NUMBER", "42");
+/// env::set_var("STRING", "hacker");
 /// let deserialized: Test = serde_json::from_str(&serialized).unwrap();
 ///
 /// assert_eq!(deserialized.number, 42);
 /// assert_eq!(deserialized.string, "my string: hacker");
 ///
 /// // Invalid number
-/// envmnt::set("NUMBER", "cuarentaydos");
-/// envmnt::set("STRING", "42");
+/// env::set_var("NUMBER", "cuarentaydos");
+/// env::set_var("STRING", "42");
 ///
 /// assert_eq!(serde_json::from_str::<Test>(&serialized).is_err(), true);
 /// ```
@@ -49,13 +52,10 @@ where
     }
 
     match StringOrAnything::<T>::deserialize(deserializer)? {
-        StringOrAnything::String(s) => {
-            let mut options = ExpandOptions::new();
-            options.expansion_type = Some(ExpansionType::Unix);
-            let value = envmnt::expand(&s, Some(options));
-
-            value.parse::<T>().map_err(serde::de::Error::custom)
-        }
+        StringOrAnything::String(s) => match shellexpand::env(&s) {
+            Ok(value) => value.parse::<T>().map_err(Error::custom),
+            Err(err) => Err(Error::custom(err)),
+        },
         StringOrAnything::Anything(anything) => Ok(anything),
     }
 }

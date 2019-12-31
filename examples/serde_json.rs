@@ -1,3 +1,4 @@
+use std::env;
 use serde_json;
 use serde::Deserialize;
 use serde_with_expand_env::with_expand_envs;
@@ -13,13 +14,13 @@ struct Test {
 fn main() {
     let serialized = r#"{"number": "$NUMBER", "string": "my string: $STRING"}"#;
 
-    envmnt::set("NUMBER", "1337");
-    envmnt::set("STRING", "hacker");
+    env::set_var("NUMBER", "1337");
+    env::set_var("STRING", "hacker");
     let deserialized: Test = serde_json::from_str(&serialized).unwrap();
     println!("{:#?}", deserialized);
 
-    envmnt::set("NUMBER", "42");
-    envmnt::set("STRING", "life, the universe and everyhing");
+    env::set_var("NUMBER", "42");
+    env::set_var("STRING", "life, the universe and everyhing");
     let deserialized: Test = serde_json::from_str(&serialized).unwrap();
     println!("{:#?}", deserialized);
 }
