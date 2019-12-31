@@ -1,18 +1,18 @@
-use std::env;
 use serde::Deserialize;
 use serde_with_expand_env::with_expand_envs;
+use std::env;
 
 #[derive(Deserialize, Debug)]
 struct Inner {
-    #[serde(deserialize_with="with_expand_envs")]
+    #[serde(deserialize_with = "with_expand_envs")]
     number: usize,
-    #[serde(deserialize_with="with_expand_envs")]
+    #[serde(deserialize_with = "with_expand_envs")]
     string: String,
 }
 
 #[derive(Deserialize, Debug)]
 struct Test {
-    #[serde(deserialize_with="with_expand_envs")]
+    #[serde(deserialize_with = "with_expand_envs")]
     name: String,
     inner: Vec<Inner>,
 }

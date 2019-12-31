@@ -1,4 +1,4 @@
-use serde::{Deserialize, Deserializer, de::Error};
+use serde::{de::Error, Deserialize, Deserializer};
 use std::fmt::Display;
 use std::str::FromStr;
 
