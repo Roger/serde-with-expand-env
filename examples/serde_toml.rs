@@ -5,7 +5,7 @@ use std::env;
 #[derive(Deserialize, Debug)]
 struct Inner {
     #[serde(deserialize_with = "with_expand_envs")]
-    number: usize,
+    number: f32,
     #[serde(deserialize_with = "with_expand_envs")]
     string: String,
 }
@@ -27,6 +27,10 @@ fn main() {
       [[inner]]
       number = "$NUMBER2"
       string = "my string: $STRING2"
+
+      [[inner]]
+      number = "${NUMBER3:-3.14}"
+      string = "my string: ${STRING3:-PI}"
     "#;
 
     env::set_var("NAME", "Bruce");

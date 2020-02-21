@@ -17,10 +17,18 @@ struct Test {
     number: usize,
     #[serde(deserialize_with="with_expand_envs")]
     string: String,
+    #[serde(deserialize_with="with_expand_envs")]
+    default: usize,
 }
 
 fn main() {
-    let serialized = r#"{"number": "$NUMBER", "string": "my string: $STRING"}"#;
+    let serialized = r#"{"number": "$NUMBER",
+                         "string": "my string: $STRING",
+                         "default": "${DEFAULT:-42}"
+                      }"#;
+
+    // No envs set will fail with enviroment variable not found
+    assert_eq!(serde_json::from_str::<Test>(&serialized).is_err(), true);
 
     env::set_var("NUMBER", "42");
     env::set_var("STRING", "hacker");
@@ -28,11 +36,15 @@ fn main() {
 
     assert_eq!(deserialized.number, 42);
     assert_eq!(deserialized.string, "my string: hacker");
+    assert_eq!(deserialized.default, 42);
+
+    env::set_var("DEFAULT", "4200");
+    let deserialized: Test = serde_json::from_str(&serialized).unwrap();
+    assert_eq!(deserialized.default, 4200);
 
     // Invalid number
     env::set_var("NUMBER", "cuarentaydos");
     env::set_var("STRING", "42");
-
     assert_eq!(serde_json::from_str::<Test>(&serialized).is_err(), true);
 }
 ```
