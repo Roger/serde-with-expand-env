@@ -18,7 +18,7 @@ travis-ci = { repository = "Roger/serde-with-expand-env", branch = "master" }
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
-shellexpand = "2.0.0"
+shellexpand = "3.1.0"
 
 [dev-dependencies]
 serde_json = "1.0.44"
